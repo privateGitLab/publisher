@@ -1,0 +1,12 @@
+	public List<Article> findByPostTime(long gte ,long lte ,Pageable pageable){
+		SpanTermQueryBuilder spanTermQuery = new SpanTermQueryBuilder("id",gte) ;
+		SpanQueryBuilder big = new SpanNearQueryBuilder(spanTermQuery, 5) ;
+		SpanQueryBuilder little = new SpanTermQueryBuilder("id",lte) ;
+		QueryBuilder queryBuilder = new SpanContainingQueryBuilder(big, little) ;
+		
+		SearchQuery searchQuery = null ;
+		
+		searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder).withPageable(pageable).build() ;
+		
+		return elasticsearchTemplate.queryForList(searchQuery,getEntityClass()) ;
+	}

@@ -1,0 +1,16 @@
+elasticsearch.cluster-name=ep_test_es5
+
+
+elasticsearch.cluster-nodes=192.168.87.13:9700
+elasticsearch.cluster-nodes1=192.168.87.11:9700
+elasticsearch.cluster-nodes2=192.168.70.14:9700
+elasticsearch.cluster-nodes3=192.168.70.15:9700
+elasticsearch.cluster-nodes4=192.168.87.55:9700
+elasticsearch.cluster-nodes5=192.168.87.56:9700
+
+elasticsearch.cluster-name1=my-esLearn
+
+elasticsearch.cluster-nodes6=172.20.33.146:9300
+elasticsearch.cluster-nodes7=172.20.33.146:9301
+elasticsearch.cluster-nodes9=172.20.33.146:9302
+

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:elasticsearch="http://www.springframework.org/schema/data/elasticsearch"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/data/elasticsearch 
+  						http://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch.xsd
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx.xsd
+	">
+
+	<!-- 启用注解 -->
+	<context:annotation-config />
+
+	<bean class="com.yiche.publish.before.DynamicStateIP"></bean>
+
+	<!-- 启动组件扫描，排除@Controller组件，该组件由SpringMVC配置文件扫描 -->
+	<context:component-scan base-package="com.yiche.publish">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	
+	<context:property-placeholder location="classpath:elasticseach.proptrties" />
+
+	<!-- 具体的IP和端口，多个节点以逗号分隔，IP和端口号可以通过elasticSearch配置文件进行修改-->
+	<elasticsearch:transport-client id="client"
+		cluster-nodes="${elasticsearch.cluster-nodes6},${elasticsearch.cluster-nodes7},${elasticsearch.cluster-nodes9}" cluster-name="${elasticsearch.cluster-name1}"/>
+
+	<!-- <elasticsearch:transport-client id="client"
+		cluster-nodes="${elasticsearch.cluster-nodes},${elasticsearch.cluster-nodes1},${elasticsearch.cluster-nodes2},${elasticsearch.cluster-nodes3},${elasticsearch.cluster-nodes4},${elasticsearch.cluster-nodes5}" 
+		cluster-name="${elasticsearch.cluster-name}"/> -->
+
+	<bean name="elasticsearchTemplate"
+		class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
+		<constructor-arg ref="client"/>
+	</bean>
+
+	<!-- Spring data 自动扫描repository接口，生成实现类 -->
+	<!-- <elasticsearch:repositories base-package="com.yiche.publish.dao"/> -->
+
+	<!-- <bean name="orderRepositoryImpl" class="name.liuxi.es.impl.OrderRepositoryImpl"> 
+		<property name="elasticsearchTemplate" ref="elasticsearchTemplate" /> </bean> -->
+</beans>

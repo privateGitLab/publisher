@@ -1,0 +1,108 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+
+<!-- 此处不能使用动态包含，只能使用静态包含 -->
+<%-- <jsp:include page="include/include.jsp"></jsp:include> --%>
+<%@ include file="include/include.jsp" %>
+<title>首页</title>
+<script type="text/javascript">
+	$(function() {
+		//var currentDateValue = $(".postTime_class").val();
+		//var formattedValue = moment(currentDateValue).format('YYYY-MM-dd HH:mm:SS') ;
+		//console.log(currentDateValue)
+		//console.log(formattedValue);
+		//$(".postTime_class").val(formattedValue);
+		var pageCurrent = ${page.pageCurrent}
+		/* 通过id删除文档 */
+		$(".delect_article_class").click(function() {
+			var id = $("#article_id").val();
+			
+			alert("要删除的文档ID：" + id) ;
+			
+			$.ajax({
+				type:"post",
+				url:"${pageContext.request.contextPath}/conterController/delectById/blog/article",
+				data :{"id": id},
+				dataType : "json",
+				//async:false ,
+				success : function(msg) {
+					//alert(msg) ;
+					if (msg == id) {
+						alert("删除文档成功!"+"删除文档ID为：" + msg);
+						window.location.href = "${pageContext.request.contextPath}/conterController/findAllArticle/blog/article?pageCurrent=" + pageCurrent
+					}
+				},
+				error: function(){
+					console.log("##encountered error when calling ajax###3")
+				}
+			});
+		})
+		
+		
+		/* 分页 */
+		$(".paging_query").click(function() {
+			var pageCurrent = $(".paging_class_${page.pageNext}").val();
+			
+			alert("到:" + pageCurrent + ":这一页") ;
+			
+			$.ajax({
+				type:"get",
+				url:"${pageContext.request.contextPath}/conterController/findAllArticle/blog/article",
+				data :{"pageCurrent": pageCurrent},
+				//dataType : "json",
+				//async:false ,
+				success : function(msg) {
+					//alert("分页成功" + msg) ;
+				},
+				error: function(){
+					console.log("##encountered error when calling ajax###3")
+				}
+			});
+		})
+		
+	})
+</script>
+
+		<div class="container">
+			<ul class="pager">
+				<%-- <h5 style="color:blue;text-align:center;font: 10px/1.5 Tahoma,Helvetica,Arial,'宋体',sans-serif">当前第【${page.pageCurrent+1}】页</h5> --%>
+				<!-- <ul class="pagination"> -->
+				<!-- <li><a href="#">«</a></li> -->
+			    <c:if test="${page.judgePageLost}">
+					<li><a class="paging_query" href="#">首页</a></li>
+					<li><input class="paging_class" type="hidden" value="0"/></li>
+					
+					<li><a class="paging_query" href="#">上一页</a></li>
+					<li><input class="paging_class" type="hidden" value="${page.pageLost}"/></li>
+				<c:if test="${page.pageCurrent-1 != 0}">
+				    <li><a class="paging_query" href="#">${page.pageCurrent-1}</a></li>
+			   		<li><input class="paging_class" type="hidden" value="${page.pageLost - 2}"/></li>
+			    </c:if>
+				    <li><a class="paging_query" href="#">${page.pageCurrent}</a></li>
+			   		<li><input class="paging_class" type="hidden" value="${page.pageLost - 1}"/></li>
+			    </c:if>
+			   
+			    <li class="disabled"><a href="#">${page.pageCurrent+1}</a></li>
+			    
+			   	<c:if test="${page.judgePageNext}">
+				   
+				    <li><a class="paging_query" href="#">${page.pageCurrent+2}</a></li>
+				   	<li><input class="paging_class" type="hidden" value="${page.pageLost + 1}"/></li>
+				    <c:if test="${page.pageCurrent+2 != page.pageCount}">
+				    	<li class="active"><a class="paging_query" href="#">${page.pageCurrent+3}</a></li>
+			    		<li><input class="paging_class" type="hidden" value="${page.pageLost + 2}"/></li>
+			    	</c:if>
+				    <li><a class="paging_query" href="#">下一页</a></li>
+				    <li><input class="paging_class_${page.pageNext}" type="hidden" value="${page.pageNext}"/></li>${page.pageNext}
+				   
+				    <li><a class="paging_query" role="button" href="#">末页</a></li>
+			 		<li><input class="paging_class" type="hidden" value="${page.pageCount - 1}"/></li>
+			 	</c:if>
+			 	
+			 	<li><h5 style="color:blue;text-align:center;font: 16px/1.0 Tahoma,Helvetica,Arial,'宋体',sans-serif">共【${page.pageCount}】页</h5></li>
+			</ul>
+			<!-- </ul> -->
+		</div>
+	</div>
+</body>
+</html>

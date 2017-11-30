@@ -10,6 +10,22 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 
+/**
+ * 
+* Copyright: Copyright (c) 2017 LanRu-Caifu
+* 
+* @ClassName: DynamicStateIP
+* @Description: 意在想动态对properties文件中的IP进行赋值****************************未完成*************************************
+*
+* @version: v1.0.0
+* @author: wangyingtong
+* @date: 2017年12月1日 上午12:27:34 
+* 
+* Modification History:
+* Date         Author          Version        Description
+*---------------------------------------------------------*
+* 2017年12月1日   wangyingtong        v1.0.0          修改原因
+ */
 public class DynamicStateIP {
 
 	public DynamicStateIP() throws IOException{

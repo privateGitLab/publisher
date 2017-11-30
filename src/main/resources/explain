@@ -1,0 +1,27 @@
+项目简单介绍文档
+
+用的spring，springmvc，spring-data-elasticsearch框架
+包的含义：
+	controller：控制层，用于与前端交互
+	service：业务逻辑层，处理业务逻辑
+	dao：与数据库交互，此项目中是elasticsearch
+
+两个问题：
+
+现在的spring.xml配置文件中的elasticsearch  ip:端口号是本机上的，改成公司集群需修改：
+
+1>.elasticsearch.properties文件中key-value进行修改
+2>.spring.xml引用进行修改(源文件已有放开注释就可以)
+
+***************************************************************************************************************************8
+文档的索引不是动态创建的是通过注解   @Document(indexName="test_article_index", type = "article")  提前指定的
+动态创建索引现在有思路一：
+					利用Java里面的反射对类上注解属性值 indexName动态进行赋值(这次赋值是全局的，在项目中赋值一次就可以)；
+					已经写好工具类 UeflexUtile 在dao层也写了相应的伪代码(测试通过)，可以动态对注解的属性值进行赋值
+
+带来的问题：
+		查询操作需要指定索引 如：elasticsearchTemplate.queryForList(searchQuery, getEntityClass());
+		底层应该是获取article类上的注解属性值作为索引的
+		，如果有多个索引（因为是动态创建），怎么保证查询的文档是从全部索引中查询出来的(用原生的elasticsearch  json语句可以做到，但
+		spring-data-elasticsearch API没查到)
+				

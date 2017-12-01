@@ -1,11 +1,22 @@
 项目简单介绍文档
 
 用的spring，springmvc，spring-data-elasticsearch框架
-包的含义：
-	controller：控制层，用于与前端交互
-	service：业务逻辑层，处理业务逻辑
-	dao：与数据库交互，此项目中是elasticsearch
 
+包的含义：
+	com.yiche.publish.controller：控制层，用于与前端交互；RESTful风格没有全部实现，以后可以直接调接口
+	com.yiche.publish.service：业务逻辑层，处理业务逻辑
+	com.yiche.publish.dao：与数据库交互，此项目中是elasticsearch(在查询中使用了时间排序，尝试了两种方式都未达到预期的效果，如果有特殊排序要求可在调试)
+	com.yiche.publish.before：在spring.xml加载elasticsearch.properties文件之前对elasticsearch.properties里面的IP:端口号进行动态赋值
+								因为连着的是本机elasticsearch集群，本机的网络IP地址会不定时的改变，所以想通过java获取本机IP然后每次加载重新赋值
+								如果连接的服务器IP不变可以不写
+	com.yiche.publish.entity：实体类包，一个发布器类Article，因为使用了框架spring-data-elasticsearch，根据java-框架-elasticsearch的映射关系
+								，通过注解对索引，类型，mapping进行了指定(参考hibernate的思想)，因为对elasticsearch了解的换不够深，对属性的mapping映射可能设置欠妥，
+								如果有更优的可进行更改
+								注:ID严格来说应该是String类型，不指定文档ID时可使用uuid作为ID，但将id设为String类型会报错(未解)，所以设置成long型
+									最重要的是保证id的唯一性，使用uuid里面的前八位数字+6位随机数作为文档ID(测试了十万条数据没有重复的，但不排除在大数据量下会产生重复数据，但在当前业务下应该不会)
+									
+								，一个分页类page	
+	com.yiche.publish.utile：工具类包
 两个问题：
 
 现在的spring.xml配置文件中的elasticsearch  ip:端口号是本机上的，改成公司集群需修改：
